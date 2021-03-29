@@ -1,0 +1,1 @@
+﻿INSERT INTO FirstChart (Y0, X0, Y1, X1, Y3, X3) VALUES (0.1, 0.1, 0.1, 0.2, 0.1, 0.3)
