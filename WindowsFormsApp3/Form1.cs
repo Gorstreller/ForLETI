@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace WindowsFormsApp3
 {
@@ -303,6 +304,16 @@ namespace WindowsFormsApp3
                 formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Aqua, markerSize: 0);
                 formsPlot1.plt.Axis(0, 4.4, 1100, 1550);
                 formsPlot1.Render();
+                chart1.Series.Add(new Series("тест"));
+                chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+                chart1.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+                chart1.MouseWheel += chData_MouseWheel;
+                chart1.ChartAreas[0].AxisX.RoundAxisValues();
+                chart1.Series["тест"].ChartType = SeriesChartType.Line;
+                for(int j = 0; j < arrayY.Length; j++)
+                {
+                    chart1.Series["тест"].Points.AddXY(arrayX[j], arrayY[j]);
+                }
                 /*var func1 = new Func<double, double?>((x) => (y0 * ((x - x1) / (x0 - x1)) * ((x - x2) / (x0 - x2)) * ((x - x3) / (x0 - x3)) * ((x - x4) / (x0 - x4))) + 
                                                              (y1 * ((x - x0) / (x1 - x0)) * ((x - x2) / (x1 - x2)) * ((x - x3) / (x1 - x3)) * ((x - x4) / (x1 - x4))) +
                                                              (y2 * ((x - x0) / (x2 - x0)) * ((x - x1) / (x2 - x1)) * ((x - x3) / (x2 - x3)) * ((x - x4) / (x2 - x4))) +
@@ -332,6 +343,34 @@ namespace WindowsFormsApp3
             }*/
         }
 
+        private void chData_MouseWheel(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (e.Delta < 0)
+                {
+                    chart1.ChartAreas[0].AxisX.ScaleView.ZoomReset();
+                    chart1.ChartAreas[0].AxisY.ScaleView.ZoomReset();
+                }
+
+                if (e.Delta > 0)
+                {
+                    double xMin = chart1.ChartAreas[0].AxisX.ScaleView.ViewMinimum;
+                    double xMax = chart1.ChartAreas[0].AxisX.ScaleView.ViewMaximum;
+                    double yMin = chart1.ChartAreas[0].AxisY.ScaleView.ViewMinimum;
+                    double yMax = chart1.ChartAreas[0].AxisY.ScaleView.ViewMaximum;
+
+                    double posXStart = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X) - (xMax - xMin) / 4;
+                    double posXFinish = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X) + (xMax - xMin) / 4;
+                    double posYStart = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) - (yMax - yMin) / 4;
+                    double posYFinish = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) + (yMax - yMin) / 4;
+
+                    chart1.ChartAreas[0].AxisX.ScaleView.Zoom(posXStart, posXFinish);
+                    chart1.ChartAreas[0].AxisY.ScaleView.Zoom(posYStart, posYFinish);
+                }
+            }
+            catch { }
+        }
         private void formsPlot1_Load(object sender, EventArgs e)
         {
 

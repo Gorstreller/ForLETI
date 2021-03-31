@@ -30,6 +30,8 @@ namespace WindowsFormsApp3
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.formsPlot1 = new ScottPlot.FormsPlot();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -146,20 +148,22 @@ namespace WindowsFormsApp3
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabControl1.SuspendLayout();
             this.sevenPoints.SuspendLayout();
             this.sixPoints.SuspendLayout();
             this.fivePoints.SuspendLayout();
             this.fourPoints.SuspendLayout();
             this.threePoints.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // formsPlot1
             // 
             this.formsPlot1.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.formsPlot1.Location = new System.Drawing.Point(12, 12);
+            this.formsPlot1.Location = new System.Drawing.Point(904, 548);
             this.formsPlot1.Name = "formsPlot1";
-            this.formsPlot1.Size = new System.Drawing.Size(826, 576);
+            this.formsPlot1.Size = new System.Drawing.Size(349, 193);
             this.formsPlot1.TabIndex = 0;
             this.formsPlot1.Load += new System.EventHandler(this.formsPlot1_Load);
             this.formsPlot1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.formsPlot1_MouseMove);
@@ -1256,11 +1260,24 @@ namespace WindowsFormsApp3
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // chart1
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(12, 12);
+            this.chart1.Name = "chart1";
+            this.chart1.Size = new System.Drawing.Size(796, 600);
+            this.chart1.TabIndex = 33;
+            this.chart1.Text = "chart1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1569, 788);
+            this.Controls.Add(this.chart1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
@@ -1287,6 +1304,7 @@ namespace WindowsFormsApp3
             this.fourPoints.PerformLayout();
             this.threePoints.ResumeLayout(false);
             this.threePoints.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1410,6 +1428,7 @@ namespace WindowsFormsApp3
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }
 
