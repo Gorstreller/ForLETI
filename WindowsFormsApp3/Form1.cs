@@ -16,7 +16,9 @@ namespace WindowsFormsApp3
 {
     public partial class Form1 : Form
     {
-        public SqlConnection sqlConnection = null;
+        private SqlConnection sqlConnection = null;
+        private SqlCommand commandForGettingPoint = null;
+        private string queryForGettingPoint;
 
         public Form1()
         {
@@ -149,8 +151,8 @@ namespace WindowsFormsApp3
         {
             // determine point nearest the cursor
             (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
-            OX.Text = mouseCoordX.ToString();
-            OY.Text = mouseCoordY.ToString();
+            OX.Text = Math.Round(mouseCoordX, 2).ToString();
+            OY.Text = Math.Round(mouseCoordY, 2).ToString();
             formsPlot1.Render();
         }
 
@@ -271,63 +273,9 @@ namespace WindowsFormsApp3
             formsPlot1.Render();
         }
 
-        private void lagrange_Click(object sender, EventArgs e)
+        private void mainBuildingButton_Click(object sender, EventArgs e)
         {
-            double P0x, P1xBefore, P3x, P0y, Py, P3y;
-            if (double.TryParse(this.P0x.Text, out P0x) &&
-                double.TryParse(this.P0y.Text, out P0y) &&
-                double.TryParse(this.P1x.Text, out P1xBefore) &&
-                double.TryParse(this.P1y.Text, out Py) &&
-                double.TryParse(this.P2x.Text, out P3x) &&
-                double.TryParse(this.P2y.Text, out P3y))
-            {
-                // Высчитываем координату y для одной направляющей точки
-                double P1yBefore = ((Py - (0.25 * P0y)) / 0.69);
-                // Пересчитываем координаты для двух направляющих точек
-                double P1x = P0x + ((2 * (P1xBefore - P0x)) / 3);
-                double P1y = P0y + ((2 * (P1yBefore - P0y)) / 3);
-                double P2x = P1xBefore + ((P3x - P1xBefore) / 3);
-                double P2y = P1yBefore + ((P3y - P1yBefore) / 3);
-                // Создаём два массива для значений по обеим осям + счётчик номера элемента
-                double[] arrayX = new double[10001];
-                double[] arrayY = new double[10001];
-                int i = 0;
-                // Заполняем массивы по формулам построения кривых Безье
-                for (double t = 0; t <= 1; t += 0.0001)
-                {
-                    arrayX[i] = Math.Pow((1 - t), 3) * P0x + 3 * t * Math.Pow((1 - t), 2) * P1x
-                        + 3 * Math.Pow(t, 2) * (1 - t) * P2x + Math.Pow(t, 3) * P3x;
-                    arrayY[i] = Math.Pow((1 - t), 3) * P0y + 3 * t * Math.Pow((1 - t), 2) * P1y
-                        + 3 * Math.Pow(t, 2) * (1 - t) * P2y + Math.Pow(t, 3) * P3y;
-                    i++;
-                }
-                formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Aqua, markerSize: 0);
-                formsPlot1.plt.Axis(0, 4.4, 1100, 1550);
-                formsPlot1.Render();
-                chart1.Series.Add(new Series("тест"));
-                chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-                chart1.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-                chart1.MouseWheel += chData_MouseWheel;
-                chart1.ChartAreas[0].AxisX.RoundAxisValues();
-                chart1.Series["тест"].ChartType = SeriesChartType.Line;
-                for(int j = 0; j < arrayY.Length; j++)
-                {
-                    chart1.Series["тест"].Points.AddXY(arrayX[j], arrayY[j]);
-                }
-                /*var func1 = new Func<double, double?>((x) => (y0 * ((x - x1) / (x0 - x1)) * ((x - x2) / (x0 - x2)) * ((x - x3) / (x0 - x3)) * ((x - x4) / (x0 - x4))) + 
-                                                             (y1 * ((x - x0) / (x1 - x0)) * ((x - x2) / (x1 - x2)) * ((x - x3) / (x1 - x3)) * ((x - x4) / (x1 - x4))) +
-                                                             (y2 * ((x - x0) / (x2 - x0)) * ((x - x1) / (x2 - x1)) * ((x - x3) / (x2 - x3)) * ((x - x4) / (x2 - x4))) +
-                                                             (y3 * ((x - x0) / (x3 - x0)) * ((x - x1) / (x3 - x1)) * ((x - x2) / (x3 - x2)) * ((x - x4) / (x3 - x4))) +
-                                                             (y4 * ((x - x0) / (x4 - x0)) * ((x - x1) / (x4 - x1)) * ((x - x2) / (x4 - x2)) * ((x - x3) / (x4 - x3))));
-                //var func1 = new Func<double, double?>((x) => MakeSystem(array, 3));
-                formsPlot1.plt.PlotFunction(func1, lineWidth: 2, label: "Ну я пытался");
-                formsPlot1.plt.Axis(0, 4.4, 1100, 1550);
-                formsPlot1.Render();*/
-            }
-            else
-            {
-                this.x0.Text = "Вы ввели неверное значение!";
-            }
+            bezierBuilding();
 
             /*Func<double, double> bezier = x => x * 2;
             Console.WriteLine(bezier(2));
@@ -343,34 +291,7 @@ namespace WindowsFormsApp3
             }*/
         }
 
-        private void chData_MouseWheel(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                if (e.Delta < 0)
-                {
-                    chart1.ChartAreas[0].AxisX.ScaleView.ZoomReset();
-                    chart1.ChartAreas[0].AxisY.ScaleView.ZoomReset();
-                }
 
-                if (e.Delta > 0)
-                {
-                    double xMin = chart1.ChartAreas[0].AxisX.ScaleView.ViewMinimum;
-                    double xMax = chart1.ChartAreas[0].AxisX.ScaleView.ViewMaximum;
-                    double yMin = chart1.ChartAreas[0].AxisY.ScaleView.ViewMinimum;
-                    double yMax = chart1.ChartAreas[0].AxisY.ScaleView.ViewMaximum;
-
-                    double posXStart = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X) - (xMax - xMin) / 4;
-                    double posXFinish = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X) + (xMax - xMin) / 4;
-                    double posYStart = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) - (yMax - yMin) / 4;
-                    double posYFinish = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) + (yMax - yMin) / 4;
-
-                    chart1.ChartAreas[0].AxisX.ScaleView.Zoom(posXStart, posXFinish);
-                    chart1.ChartAreas[0].AxisY.ScaleView.Zoom(posYStart, posYFinish);
-                }
-            }
-            catch { }
-        }
         private void formsPlot1_Load(object sender, EventArgs e)
         {
 
@@ -381,6 +302,119 @@ namespace WindowsFormsApp3
             Form2 form2 = new Form2();
             form2.Show();
             //
+        }
+
+        private void bezierBuilding()
+        {
+            double P0x, P1xBefore, P3x, P0y, Py, P3y;
+            if (double.TryParse(this.P0x.Text, out P0x) &&
+                double.TryParse(this.P0y.Text, out P0y) &&
+                double.TryParse(this.P1x.Text, out P1xBefore) &&
+                double.TryParse(this.P1y.Text, out Py) &&
+                double.TryParse(this.P2x.Text, out P3x) &&
+                double.TryParse(this.P2y.Text, out P3y))
+            {
+                double[] arrayForCheckY = new double[10001];
+                double[] arrayForCheckX = new double[10001];
+                // Создаём два массива для значений по обеим осям + счётчик номера элемента
+                double[] arrayX = new double[10001];
+                double[] arrayY = new double[10001];
+                int i;
+
+                double P1yBefore, P1x, P1y, P2x, P2y;
+                for (double j = 0.50; j < 0.999; j += 0.001)
+                {
+                    // Высчитываем координату y для одной направляющей точки
+                    P1yBefore = ((Py - (0.25 * P0y)) / j);
+                    // Пересчитываем координаты для двух направляющих точек
+                    P1x = P0x + ((2 * (P1xBefore - P0x)) / 3);
+                    P1y = P0y + ((2 * (P1yBefore - P0y)) / 3);
+                    P2x = P1xBefore + ((P3x - P1xBefore) / 3);
+                    P2y = P1yBefore + ((P3y - P1yBefore) / 3);
+                    i = 0;
+                    // Заполняем массивы по формулам построения кривых Безье
+                    for (double t = 0; t <= 1; t += 0.0001)
+                    {
+                        arrayX[i] = Math.Pow((1 - t), 3) * P0x + 3 * t * Math.Pow((1 - t), 2) * P1x
+                            + 3 * Math.Pow(t, 2) * (1 - t) * P2x + Math.Pow(t, 3) * P3x;
+                        arrayY[i] = Math.Pow((1 - t), 3) * P0y + 3 * t * Math.Pow((1 - t), 2) * P1y
+                            + 3 * Math.Pow(t, 2) * (1 - t) * P2y + Math.Pow(t, 3) * P3y;
+
+
+                        arrayForCheckX[i] = Math.Round(arrayX[i], 2);
+                        arrayForCheckY[i] = Math.Round(arrayY[i]);
+
+                        i++;
+                    }
+
+                    if (arrayForCheckX.Contains(P1xBefore) && arrayForCheckY[Array.IndexOf(arrayForCheckX, P1xBefore)] == Py)
+                    {
+                        formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Aqua, markerSize: 0);
+                        formsPlot1.plt.Axis(0, 4.4, 1100, 1550);
+                        formsPlot1.plt.AxisBounds(0, 4.4, 1100, 1550);
+                        formsPlot1.Render();
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                this.x0.Text = "Вы ввели неверное значение!";
+            }
+        }
+
+        private void fullDiagram_Click(object sender, EventArgs e)
+        {
+            string queryForCount = String.Format("SELECT COUNT(*) FROM {0}", nameOfDiagram.Text);
+            SqlCommand commandForCount = new SqlCommand(queryForCount, sqlConnection);
+            int numberOfRows = (int) commandForCount.ExecuteScalar();
+
+            for (int i = 3; i <= 3; i++)
+            {
+                double X0 = getPointFromDB("X0", i);
+                double Y0 = getPointFromDB("Y0", i);
+                double X1 = getPointFromDB("X1", i);
+                double Y1 = getPointFromDB("Y1", i);
+                double X2 = getPointFromDB("X2", i);
+                double Y2 = getPointFromDB("Y2", i);
+                double X3 = getPointFromDB("X3", i);
+                double Y3 = getPointFromDB("Y3", i);
+
+                pointX0.Text = X0.ToString();
+                pointY0.Text = Y0.ToString();
+                pointX1.Text = X1.ToString();
+                pointY1.Text = Y1.ToString();
+                pointX2.Text = X2.ToString();
+                pointY2.Text = Y2.ToString();
+                pointX3.Text = X3.ToString();
+                pointY3.Text = Y3.ToString();
+            }
+
+            /*for (int i = 1; i <= 5; i++)
+            {
+                
+            }*/
+            /*SqlCommand command = new SqlCommand();
+            string query1 = "SELECT X0 FROM Test1 WHERE Id = 4";
+            command.CommandText = query1;
+            command.Connection = sqlConnection;
+
+            var result = command.ExecuteScalar().ToString();*/
+            /*
+                        nameOfDiagram.Text = result;*/
+
+            SqlCommand command1 = new SqlCommand("SELECT COUNT(*) FROM Test1", sqlConnection);
+            int count = (int) command1.ExecuteScalar();
+            nameOfDiagram.Text = count.ToString();
+
+            /*string new = dataAdapter*/
+        }
+
+        private double getPointFromDB(string nameOfPoint, int id)
+        {
+            queryForGettingPoint = String.Format("SELECT {0} FROM Test1 WHERE Id = {1}", nameOfPoint, id);
+            commandForGettingPoint = new SqlCommand(queryForGettingPoint, sqlConnection);
+            return (double) commandForGettingPoint.ExecuteScalar();
         }
     }
 }

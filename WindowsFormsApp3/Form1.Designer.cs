@@ -30,13 +30,11 @@ namespace WindowsFormsApp3
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.formsPlot1 = new ScottPlot.FormsPlot();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.lagrange = new System.Windows.Forms.Button();
+            this.mainBuildingButton = new System.Windows.Forms.Button();
             this.x0 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -148,22 +146,31 @@ namespace WindowsFormsApp3
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.nameOfDiagram = new System.Windows.Forms.TextBox();
+            this.label53 = new System.Windows.Forms.Label();
+            this.fullDiagram = new System.Windows.Forms.Button();
+            this.pointX0 = new System.Windows.Forms.TextBox();
+            this.pointY0 = new System.Windows.Forms.TextBox();
+            this.pointX1 = new System.Windows.Forms.TextBox();
+            this.pointY1 = new System.Windows.Forms.TextBox();
+            this.pointX2 = new System.Windows.Forms.TextBox();
+            this.pointY2 = new System.Windows.Forms.TextBox();
+            this.pointX3 = new System.Windows.Forms.TextBox();
+            this.pointY3 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.sevenPoints.SuspendLayout();
             this.sixPoints.SuspendLayout();
             this.fivePoints.SuspendLayout();
             this.fourPoints.SuspendLayout();
             this.threePoints.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // formsPlot1
             // 
             this.formsPlot1.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.formsPlot1.Location = new System.Drawing.Point(904, 548);
+            this.formsPlot1.Location = new System.Drawing.Point(12, 12);
             this.formsPlot1.Name = "formsPlot1";
-            this.formsPlot1.Size = new System.Drawing.Size(349, 193);
+            this.formsPlot1.Size = new System.Drawing.Size(810, 588);
             this.formsPlot1.TabIndex = 0;
             this.formsPlot1.Load += new System.EventHandler(this.formsPlot1_Load);
             this.formsPlot1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.formsPlot1_MouseMove);
@@ -198,15 +205,15 @@ namespace WindowsFormsApp3
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // lagrange
+            // mainBuildingButton
             // 
-            this.lagrange.Location = new System.Drawing.Point(1329, 328);
-            this.lagrange.Name = "lagrange";
-            this.lagrange.Size = new System.Drawing.Size(136, 47);
-            this.lagrange.TabIndex = 4;
-            this.lagrange.Text = "Безье";
-            this.lagrange.UseVisualStyleBackColor = true;
-            this.lagrange.Click += new System.EventHandler(this.lagrange_Click);
+            this.mainBuildingButton.Location = new System.Drawing.Point(1329, 328);
+            this.mainBuildingButton.Name = "mainBuildingButton";
+            this.mainBuildingButton.Size = new System.Drawing.Size(136, 47);
+            this.mainBuildingButton.TabIndex = 4;
+            this.mainBuildingButton.Text = "Безье";
+            this.mainBuildingButton.UseVisualStyleBackColor = true;
+            this.mainBuildingButton.Click += new System.EventHandler(this.mainBuildingButton_Click);
             // 
             // x0
             // 
@@ -1170,7 +1177,7 @@ namespace WindowsFormsApp3
             this.P1x.Name = "P1x";
             this.P1x.Size = new System.Drawing.Size(162, 20);
             this.P1x.TabIndex = 59;
-            this.P1x.Text = "2,5";
+            this.P1x.Text = "2,50";
             // 
             // label49
             // 
@@ -1260,31 +1267,115 @@ namespace WindowsFormsApp3
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // chart1
+            // nameOfDiagram
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(12, 12);
-            this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(796, 600);
-            this.chart1.TabIndex = 33;
-            this.chart1.Text = "chart1";
+            this.nameOfDiagram.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nameOfDiagram.Location = new System.Drawing.Point(1329, 48);
+            this.nameOfDiagram.Name = "nameOfDiagram";
+            this.nameOfDiagram.Size = new System.Drawing.Size(188, 29);
+            this.nameOfDiagram.TabIndex = 33;
+            this.nameOfDiagram.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Font = new System.Drawing.Font("Times New Roman", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label53.Location = new System.Drawing.Point(1325, 23);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(191, 22);
+            this.label53.TabIndex = 39;
+            this.label53.Text = "Название диаграммы";
+            // 
+            // fullDiagram
+            // 
+            this.fullDiagram.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.fullDiagram.Location = new System.Drawing.Point(1045, 479);
+            this.fullDiagram.Name = "fullDiagram";
+            this.fullDiagram.Size = new System.Drawing.Size(164, 63);
+            this.fullDiagram.TabIndex = 40;
+            this.fullDiagram.Text = "Построить";
+            this.fullDiagram.UseVisualStyleBackColor = true;
+            this.fullDiagram.Click += new System.EventHandler(this.fullDiagram_Click);
+            // 
+            // pointX0
+            // 
+            this.pointX0.Location = new System.Drawing.Point(316, 708);
+            this.pointX0.Name = "pointX0";
+            this.pointX0.Size = new System.Drawing.Size(95, 20);
+            this.pointX0.TabIndex = 41;
+            // 
+            // pointY0
+            // 
+            this.pointY0.Location = new System.Drawing.Point(438, 708);
+            this.pointY0.Name = "pointY0";
+            this.pointY0.Size = new System.Drawing.Size(95, 20);
+            this.pointY0.TabIndex = 42;
+            // 
+            // pointX1
+            // 
+            this.pointX1.Location = new System.Drawing.Point(561, 708);
+            this.pointX1.Name = "pointX1";
+            this.pointX1.Size = new System.Drawing.Size(95, 20);
+            this.pointX1.TabIndex = 43;
+            // 
+            // pointY1
+            // 
+            this.pointY1.Location = new System.Drawing.Point(685, 708);
+            this.pointY1.Name = "pointY1";
+            this.pointY1.Size = new System.Drawing.Size(95, 20);
+            this.pointY1.TabIndex = 44;
+            // 
+            // pointX2
+            // 
+            this.pointX2.Location = new System.Drawing.Point(813, 708);
+            this.pointX2.Name = "pointX2";
+            this.pointX2.Size = new System.Drawing.Size(95, 20);
+            this.pointX2.TabIndex = 45;
+            // 
+            // pointY2
+            // 
+            this.pointY2.Location = new System.Drawing.Point(933, 708);
+            this.pointY2.Name = "pointY2";
+            this.pointY2.Size = new System.Drawing.Size(95, 20);
+            this.pointY2.TabIndex = 46;
+            // 
+            // pointX3
+            // 
+            this.pointX3.Location = new System.Drawing.Point(1063, 708);
+            this.pointX3.Name = "pointX3";
+            this.pointX3.Size = new System.Drawing.Size(95, 20);
+            this.pointX3.TabIndex = 47;
+            // 
+            // pointY3
+            // 
+            this.pointY3.Location = new System.Drawing.Point(1206, 708);
+            this.pointY3.Name = "pointY3";
+            this.pointY3.Size = new System.Drawing.Size(95, 20);
+            this.pointY3.TabIndex = 48;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1569, 788);
-            this.Controls.Add(this.chart1);
+            this.Controls.Add(this.pointY3);
+            this.Controls.Add(this.pointX3);
+            this.Controls.Add(this.pointY2);
+            this.Controls.Add(this.pointX2);
+            this.Controls.Add(this.pointY1);
+            this.Controls.Add(this.pointX1);
+            this.Controls.Add(this.pointY0);
+            this.Controls.Add(this.pointX0);
+            this.Controls.Add(this.fullDiagram);
+            this.Controls.Add(this.label53);
+            this.Controls.Add(this.nameOfDiagram);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.OY);
             this.Controls.Add(this.OX);
-            this.Controls.Add(this.lagrange);
+            this.Controls.Add(this.mainBuildingButton);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -1304,7 +1395,6 @@ namespace WindowsFormsApp3
             this.fourPoints.PerformLayout();
             this.threePoints.ResumeLayout(false);
             this.threePoints.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1316,7 +1406,7 @@ namespace WindowsFormsApp3
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button lagrange;
+        private System.Windows.Forms.Button mainBuildingButton;
         private System.Windows.Forms.TextBox x0;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -1428,7 +1518,17 @@ namespace WindowsFormsApp3
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.TextBox nameOfDiagram;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Button fullDiagram;
+        private System.Windows.Forms.TextBox pointX0;
+        private System.Windows.Forms.TextBox pointY0;
+        private System.Windows.Forms.TextBox pointX1;
+        private System.Windows.Forms.TextBox pointY1;
+        private System.Windows.Forms.TextBox pointX2;
+        private System.Windows.Forms.TextBox pointY2;
+        private System.Windows.Forms.TextBox pointX3;
+        private System.Windows.Forms.TextBox pointY3;
     }
 }
 
