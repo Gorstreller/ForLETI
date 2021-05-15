@@ -17,6 +17,7 @@ namespace WindowsFormsApp3
         private List<Label> listOfLabels = new List<Label>();
         private List<ComboBox> listOfComboBoxes = new List<ComboBox>();
         private List<TextBox> listOfTextBoxes = new List<TextBox>();
+        private List<TextBox> listOfTextBoxesForColor = new List<TextBox>();
         private SqlConnection sqlConnection = null;
         private string query;
         private SqlCommand command;
@@ -40,23 +41,22 @@ namespace WindowsFormsApp3
 
         private void buttonAddDiagram_Click(object sender, EventArgs e)
         {
-            addNewTable();
             addFirstLineInDB();
             addAnotherLinesInDB();
-            // Прописываем SQL команду 
-            SqlCommand command = new SqlCommand(
-                $"INSERT INTO [FirstChart] (Y0, X0, Y1, X1, Y2, X2, Y3, X3) VALUES (@Y0, @X0, @Y1, @X1, @Y2, @X2, @Y3, @X3)", sqlConnection);
-            
-            command.Parameters.AddWithValue("X0", Convert.ToDouble(textBox1.Text));
-            command.Parameters.AddWithValue("Y0", Convert.ToDouble(textBox2.Text));
-            command.Parameters.AddWithValue("X1", Convert.ToDouble(textBox3.Text));
-            command.Parameters.AddWithValue("Y1", Convert.ToDouble(textBox4.Text));
-            command.Parameters.AddWithValue("X2", Convert.ToDouble(textBox5.Text));
-            command.Parameters.AddWithValue("Y2", Convert.ToDouble(textBox6.Text));
-            command.Parameters.AddWithValue("X3", Convert.ToDouble(textBox7.Text));
-            command.Parameters.AddWithValue("Y3", Convert.ToDouble(textBox8.Text));
-            // Добавляем все значения в БД
-            command.ExecuteNonQuery();
+            //// Прописываем SQL команду 
+            //SqlCommand command = new SqlCommand(
+            //    $"INSERT INTO [FirstChart] (Y0, X0, Y1, X1, Y2, X2, Y3, X3) VALUES (@Y0, @X0, @Y1, @X1, @Y2, @X2, @Y3, @X3)", sqlConnection);
+
+            //command.Parameters.AddWithValue("X0", Convert.ToDouble(textBox1.Text));
+            //command.Parameters.AddWithValue("Y0", Convert.ToDouble(textBox2.Text));
+            //command.Parameters.AddWithValue("X1", Convert.ToDouble(textBox3.Text));
+            //command.Parameters.AddWithValue("Y1", Convert.ToDouble(textBox4.Text));
+            //command.Parameters.AddWithValue("X2", Convert.ToDouble(textBox5.Text));
+            //command.Parameters.AddWithValue("Y2", Convert.ToDouble(textBox6.Text));
+            //command.Parameters.AddWithValue("X3", Convert.ToDouble(textBox7.Text));
+            //command.Parameters.AddWithValue("Y3", Convert.ToDouble(textBox8.Text));
+            //// Добавляем все значения в БД
+            //command.ExecuteNonQuery();
         }
 
         // Добавление новой таблицы в БД. Название берётся из поля на форме
@@ -71,11 +71,19 @@ namespace WindowsFormsApp3
                             "X2 FLOAT DEFAULT ((-300)) NULL, " +
                             "Y2 FLOAT DEFAULT ((-300)) NULL, " +
                             "X3 FLOAT NOT NULL, " +
-                            "Y3 FLOAT NOT NULL)", nameOfDiagram.Text);
+                            "Y3 FLOAT NOT NULL, " +
+                            "NumberOfColorGroup1 INT DEFAULT ((-300)) NULL, " +
+                            "NumberOfColorGroup2 INT DEFAULT ((-300)) NULL)", nameOfDiagram.Text.Replace("-", ""));
 
             SqlCommand addTable = new SqlCommand(query, sqlConnection);
-
-            addTable.ExecuteNonQuery();
+            try
+            {
+                addTable.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show("Данная диаграмма уже зарегистрирована в базе!");
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -83,11 +91,18 @@ namespace WindowsFormsApp3
 
         }
 
+        // Метод для добавления строки
         private void buttonAddLine_Click(object sender, EventArgs e)
         {
             addNumberLabel();
             addComboBox();
             addLineOfTextBoxes();
+            addLineOfTextBoxesForColor();
+        }
+
+        private void deleteLineButton_Click(object sender, EventArgs e)
+        {
+            deleteRowsFromForm();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -221,6 +236,59 @@ namespace WindowsFormsApp3
             }
         }
 
+        // Метод для добавления двух текстовых полей для задания цветовых групп
+        private void addLineOfTextBoxesForColor()
+        {
+            // Добавляем 2 поля для текста на форму
+            listOfTextBoxesForColor.Add(new TextBox());
+            listOfTextBoxesForColor.Add(new TextBox());
+
+            if (listOfTextBoxesForColor.Count == 2)
+            {
+                // Задаём координаты для всех полей второй строки
+                // Первое поле
+                listOfTextBoxesForColor[0].Top = numberOfColorGroup1.Location.Y + numberOfColorGroup1.Size.Height + 5;
+                listOfTextBoxesForColor[0].Left = numberOfColorGroup1.Location.X;
+                listOfTextBoxesForColor[0].Width = numberOfColorGroup1.Size.Width;
+                listOfTextBoxesForColor[0].Height = numberOfColorGroup1.Size.Height;
+                // Второе поле
+                listOfTextBoxesForColor[1].Top = numberOfColorGroup2.Location.Y + numberOfColorGroup2.Size.Height + 5;
+                listOfTextBoxesForColor[1].Left = numberOfColorGroup2.Location.X;
+                listOfTextBoxesForColor[1].Width = numberOfColorGroup2.Size.Width;
+                listOfTextBoxesForColor[1].Height = numberOfColorGroup2.Size.Height;
+                // Добавляем все новые поля на форму
+                Controls.Add(listOfTextBoxesForColor[0]);
+                Controls.Add(listOfTextBoxesForColor[1]);
+            }
+            else
+            {
+                // Задаём координаты для любой строки, которая будет ниже второй
+                // Первое поле
+                listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 2].Top = 
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 4].Location.Y +
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 4].Size.Height + 5;
+                listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 2].Left = 
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 4].Location.X;
+                listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 2].Width = 
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 4].Size.Width;
+                listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 2].Height =
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 4].Size.Height;
+                // Второе поле
+                listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 1].Top = 
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 3].Location.Y + 
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 3].Size.Height + 5;
+                listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 1].Left = 
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 3].Location.X;
+                listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 1].Width =
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 3].Size.Width;
+                listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 1].Height = 
+                    listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 3].Size.Height;
+                // Добавляем все новые поля на форму
+                Controls.Add(listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 2]);
+                Controls.Add(listOfTextBoxesForColor[listOfTextBoxesForColor.Count - 1]);
+            }
+        }
+
         // Метод для добавления комбо боксов для выбора количества точек, которые задают одну линию
         private void addComboBox()
         {
@@ -303,10 +371,10 @@ namespace WindowsFormsApp3
                 }
                 else if (listOfComboBoxes[i].SelectedItem.Equals("3 точки"))
                 {
-                    listOfTextBoxes[(i * 8) + 2].Enabled = false;
-                    listOfTextBoxes[(i * 8) + 3].Enabled = false;
-                    listOfTextBoxes[(i * 8) + 4].Enabled = true;
-                    listOfTextBoxes[(i * 8) + 5].Enabled = true;
+                    listOfTextBoxes[(i * 8) + 2].Enabled = true;
+                    listOfTextBoxes[(i * 8) + 3].Enabled = true;
+                    listOfTextBoxes[(i * 8) + 4].Enabled = false;
+                    listOfTextBoxes[(i * 8) + 5].Enabled = false;
                 }
                 else if (listOfComboBoxes[i].SelectedItem.Equals("4 точки"))
                 {
@@ -330,10 +398,10 @@ namespace WindowsFormsApp3
             }
             else if (comboBox1.SelectedItem.Equals("3 точки"))
             {
-                textBox3.Enabled = false;
-                textBox4.Enabled = false;
-                textBox5.Enabled = true;
-                textBox6.Enabled = true;
+                textBox3.Enabled = true;
+                textBox4.Enabled = true;
+                textBox5.Enabled = false;
+                textBox6.Enabled = false;
             }
             else if (comboBox1.SelectedItem.Equals("4 точки"))
             {
@@ -344,118 +412,207 @@ namespace WindowsFormsApp3
             }
         }
 
+        // Метод для добавления первой строчки в БД
         private void addFirstLineInDB()
         {
-            switch (comboBox1.SelectedItem)
+            query = string.Format("INSERT INTO [{0}] (X0, Y0, X1, Y1, X2, Y2, X3, Y3, NumberOfColorGroup1, NumberOfColorGroup2)" +
+                       " VALUES (@X0, @Y0, @X1, @Y1, @X2, @Y2, @X3, @Y3, @NumberOfColorGroup1, @NumberOfColorGroup2)",
+                       nameOfDiagram.Text.Replace("-", ""));
+            if (String.IsNullOrEmpty(numberOfColorGroup1.Text) && !String.IsNullOrEmpty(numberOfColorGroup2.Text))
             {
-                case "2 точки":
-                    query = string.Format("INSERT INTO [{0}] (X0, Y0, X3, Y3) VALUES (@X0, @Y0, @X3, @Y3)", nameOfDiagram.Text);
-                    command = new SqlCommand(query, sqlConnection);
-
-                    command.Parameters.AddWithValue("X0", Convert.ToDouble(textBox1.Text));
-                    command.Parameters.AddWithValue("Y0", Convert.ToDouble(textBox2.Text));
-                    command.Parameters.AddWithValue("X1", -300);
-                    command.Parameters.AddWithValue("Y1", -300);
-                    command.Parameters.AddWithValue("X2", -300);
-                    command.Parameters.AddWithValue("Y2", -300);
-                    command.Parameters.AddWithValue("X3", Convert.ToDouble(textBox7.Text));
-                    command.Parameters.AddWithValue("Y3", Convert.ToDouble(textBox8.Text));
-
-                    // Добавляем все значения в БД
-                    command.ExecuteNonQuery();
-                    break;
-                case "3 точки":
-                    query = string.Format("INSERT INTO [{0}] (X0, Y0, X2, Y2, X3, Y3) VALUES (@X0, @Y0, @X2, @Y2, @X3, @Y3)", nameOfDiagram.Text);
-                    command = new SqlCommand(query, sqlConnection);
-
-                    command.Parameters.AddWithValue("X0", Convert.ToDouble(textBox1.Text));
-                    command.Parameters.AddWithValue("Y0", Convert.ToDouble(textBox2.Text));
-                    command.Parameters.AddWithValue("X1", -300);
-                    command.Parameters.AddWithValue("Y1", -300);
-                    command.Parameters.AddWithValue("X2", Convert.ToDouble(textBox5.Text));
-                    command.Parameters.AddWithValue("Y2", Convert.ToDouble(textBox6.Text));
-                    command.Parameters.AddWithValue("X3", Convert.ToDouble(textBox7.Text));
-                    command.Parameters.AddWithValue("Y3", Convert.ToDouble(textBox8.Text));
-
-                    // Добавляем все значения в БД
-                    command.ExecuteNonQuery();
-                    break;
-                case "4 точки":
-                    query = string.Format("INSERT INTO [{0}] (X0, Y0, X1, Y1, X2, Y2, X3, Y3) VALUES (@X0, @Y0, @X1, @Y1, @X2, @Y2, @X3, @Y3)", nameOfDiagram.Text);
-                    command = new SqlCommand(query, sqlConnection);
-
-                    command.Parameters.AddWithValue("X0", Convert.ToDouble(textBox1.Text));
-                    command.Parameters.AddWithValue("Y0", Convert.ToDouble(textBox2.Text));
-                    command.Parameters.AddWithValue("X1", Convert.ToDouble(textBox3.Text));
-                    command.Parameters.AddWithValue("Y1", Convert.ToDouble(textBox4.Text));
-                    command.Parameters.AddWithValue("X2", Convert.ToDouble(textBox5.Text));
-                    command.Parameters.AddWithValue("Y2", Convert.ToDouble(textBox6.Text));
-                    command.Parameters.AddWithValue("X3", Convert.ToDouble(textBox7.Text));
-                    command.Parameters.AddWithValue("Y3", Convert.ToDouble(textBox8.Text));
-
-                    // Добавляем все значения в БД
-                    command.ExecuteNonQuery();
-                    break;
+                command = new SqlCommand(query, sqlConnection);
+                command.Parameters.AddWithValue("NumberOfColorGroup1", -300);
+                command.Parameters.AddWithValue("NumberOfColorGroup2", Convert.ToInt32(numberOfColorGroup2.Text));
             }
-        }
-
-        private void addAnotherLinesInDB()
-        {
-            for (int i = 0; i < listOfComboBoxes.Count; i++)
+            else if (!String.IsNullOrEmpty(numberOfColorGroup1.Text) && String.IsNullOrEmpty(numberOfColorGroup2.Text))
             {
-                switch (listOfComboBoxes[i].SelectedItem)
+                command = new SqlCommand(query, sqlConnection);
+                command.Parameters.AddWithValue("NumberOfColorGroup1", Convert.ToInt32(numberOfColorGroup1.Text));
+                command.Parameters.AddWithValue("NumberOfColorGroup2", -300);
+            }
+            else if (String.IsNullOrEmpty(numberOfColorGroup1.Text) && String.IsNullOrEmpty(numberOfColorGroup2.Text))
+            {
+                command = new SqlCommand(query, sqlConnection);
+                command.Parameters.AddWithValue("NumberOfColorGroup1", -300);
+                command.Parameters.AddWithValue("NumberOfColorGroup2", -300);
+            }
+            else
+            {
+                command = new SqlCommand(query, sqlConnection);
+                command.Parameters.AddWithValue("NumberOfColorGroup1", Convert.ToInt32(numberOfColorGroup1.Text));
+                command.Parameters.AddWithValue("NumberOfColorGroup2", Convert.ToInt32(numberOfColorGroup2.Text));
+            }
+            try
+            {
+                switch (comboBox1.SelectedItem)
                 {
                     case "2 точки":
-                        query = string.Format("INSERT INTO [{0}] (X0, Y0, X3, Y3) VALUES (@X0, @Y0, @X3, @Y3)", nameOfDiagram.Text);
-                        command = new SqlCommand(query, sqlConnection);
-
-                        command.Parameters.AddWithValue("X0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 0].Text));
-                        command.Parameters.AddWithValue("Y0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 1].Text));
+                        command.Parameters.AddWithValue("X0", Convert.ToDouble(textBox1.Text));
+                        command.Parameters.AddWithValue("Y0", Convert.ToDouble(textBox2.Text));
                         command.Parameters.AddWithValue("X1", -300);
                         command.Parameters.AddWithValue("Y1", -300);
                         command.Parameters.AddWithValue("X2", -300);
                         command.Parameters.AddWithValue("Y2", -300);
-                        command.Parameters.AddWithValue("X3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 6].Text));
-                        command.Parameters.AddWithValue("Y3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 7].Text));
+                        command.Parameters.AddWithValue("X3", Convert.ToDouble(textBox7.Text));
+                        command.Parameters.AddWithValue("Y3", Convert.ToDouble(textBox8.Text));
 
-                        // Добавляем все значения в БД
-                        command.ExecuteNonQuery();
                         break;
                     case "3 точки":
-                        query = string.Format("INSERT INTO [{0}] (X0, Y0, X2, Y2, X3, Y3) VALUES (@X0, @Y0, @X2, @Y2, @X3, @Y3)", nameOfDiagram.Text);
-                        command = new SqlCommand(query, sqlConnection);
+                        command.Parameters.AddWithValue("X0", Convert.ToDouble(textBox1.Text));
+                        command.Parameters.AddWithValue("Y0", Convert.ToDouble(textBox2.Text));
+                        command.Parameters.AddWithValue("X1", Convert.ToDouble(textBox3.Text));
+                        command.Parameters.AddWithValue("Y1", Convert.ToDouble(textBox4.Text));
+                        command.Parameters.AddWithValue("X2", -300);
+                        command.Parameters.AddWithValue("Y2", -300);
+                        command.Parameters.AddWithValue("X3", Convert.ToDouble(textBox7.Text));
+                        command.Parameters.AddWithValue("Y3", Convert.ToDouble(textBox8.Text));
 
-                        command.Parameters.AddWithValue("X0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 0].Text));
-                        command.Parameters.AddWithValue("Y0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 1].Text));
-                        command.Parameters.AddWithValue("X1", -300);
-                        command.Parameters.AddWithValue("Y1", -300);
-                        command.Parameters.AddWithValue("X2", Convert.ToDouble(listOfTextBoxes[(i * 8) + 4].Text));
-                        command.Parameters.AddWithValue("Y2", Convert.ToDouble(listOfTextBoxes[(i * 8) + 5].Text));
-                        command.Parameters.AddWithValue("X3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 6].Text));
-                        command.Parameters.AddWithValue("Y3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 7].Text));
-
-                        // Добавляем все значения в БД
-                        command.ExecuteNonQuery();
                         break;
                     case "4 точки":
-                        query = string.Format("INSERT INTO [{0}] (X0, Y0, X1, Y1, X2, Y2, X3, Y3) VALUES (@X0, @Y0, @X1, @Y1, @X2, @Y2, @X3, @Y3)", nameOfDiagram.Text);
-                        command = new SqlCommand(query, sqlConnection);
+                        command.Parameters.AddWithValue("X0", Convert.ToDouble(textBox1.Text));
+                        command.Parameters.AddWithValue("Y0", Convert.ToDouble(textBox2.Text));
+                        command.Parameters.AddWithValue("X1", Convert.ToDouble(textBox3.Text));
+                        command.Parameters.AddWithValue("Y1", Convert.ToDouble(textBox4.Text));
+                        command.Parameters.AddWithValue("X2", Convert.ToDouble(textBox5.Text));
+                        command.Parameters.AddWithValue("Y2", Convert.ToDouble(textBox6.Text));
+                        command.Parameters.AddWithValue("X3", Convert.ToDouble(textBox7.Text));
+                        command.Parameters.AddWithValue("Y3", Convert.ToDouble(textBox8.Text));
 
-                        command.Parameters.AddWithValue("X0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 0].Text));
-                        command.Parameters.AddWithValue("Y0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 1].Text));
-                        command.Parameters.AddWithValue("X1", Convert.ToDouble(listOfTextBoxes[(i * 8) + 2].Text));
-                        command.Parameters.AddWithValue("Y1", Convert.ToDouble(listOfTextBoxes[(i * 8) + 3].Text));
-                        command.Parameters.AddWithValue("X2", Convert.ToDouble(listOfTextBoxes[(i * 8) + 4].Text));
-                        command.Parameters.AddWithValue("Y2", Convert.ToDouble(listOfTextBoxes[(i * 8) + 5].Text));
-                        command.Parameters.AddWithValue("X3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 6].Text));
-                        command.Parameters.AddWithValue("Y3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 7].Text));
-
-                        // Добавляем все значения в БД
-                        command.ExecuteNonQuery();
                         break;
                 }
             }
-            
+            catch (FormatException)
+            {
+                MessageBox.Show("Заполните все поля координат точек!");
+            }
+            addNewTable();
+            // Добавляем все значения в БД
+            command.ExecuteNonQuery();
+        }
+
+        private void addAnotherLinesInDB()
+        {
+            try
+            {
+                for (int i = 0; i < listOfComboBoxes.Count; i++)
+                {
+                    query = string.Format("INSERT INTO [{0}] (X0, Y0, X1, Y1, X2, Y2, X3, Y3, NumberOfColorGroup1, NumberOfColorGroup2)" +
+                       " VALUES (@X0, @Y0, @X1, @Y1, @X2, @Y2, @X3, @Y3, @NumberOfColorGroup1, @NumberOfColorGroup2)", 
+                       nameOfDiagram.Text.Replace("-", ""));
+                    if (String.IsNullOrEmpty(listOfTextBoxesForColor[(i * 2) + 0].Text) && !String.IsNullOrEmpty(listOfTextBoxesForColor[(i * 2) + 1].Text))
+                    {
+                        command = new SqlCommand(query, sqlConnection);
+                        command.Parameters.AddWithValue("NumberOfColorGroup1", -300);
+                        command.Parameters.AddWithValue("NumberOfColorGroup2", Convert.ToInt32(listOfTextBoxesForColor[(i * 2) + 1].Text));
+                    }
+                    else if (!String.IsNullOrEmpty(listOfTextBoxesForColor[(i * 2) + 0].Text) && String.IsNullOrEmpty(listOfTextBoxesForColor[(i * 2) + 1].Text))
+                    {
+                        command = new SqlCommand(query, sqlConnection);
+                        command.Parameters.AddWithValue("NumberOfColorGroup1", Convert.ToInt32(listOfTextBoxesForColor[(i * 2) + 0].Text));
+                        command.Parameters.AddWithValue("NumberOfColorGroup2", -300);
+                    }
+                    else if (String.IsNullOrEmpty(listOfTextBoxesForColor[(i * 2) + 0].Text) && String.IsNullOrEmpty(listOfTextBoxesForColor[(i * 2) + 1].Text))
+                    {
+                        command = new SqlCommand(query, sqlConnection);
+                        command.Parameters.AddWithValue("NumberOfColorGroup1", -300);
+                        command.Parameters.AddWithValue("NumberOfColorGroup2", -300);
+                    }
+                    else
+                    {
+                        command = new SqlCommand(query, sqlConnection);
+                        command.Parameters.AddWithValue("NumberOfColorGroup1", Convert.ToInt32(listOfTextBoxesForColor[(i * 2) + 0].Text));
+                        command.Parameters.AddWithValue("NumberOfColorGroup2", Convert.ToInt32(listOfTextBoxesForColor[(i * 2) + 1].Text));
+                    }
+
+                    switch (listOfComboBoxes[i].SelectedItem)
+                    {
+                        case "2 точки":
+                            command.Parameters.AddWithValue("X0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 0].Text));
+                            command.Parameters.AddWithValue("Y0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 1].Text));
+                            command.Parameters.AddWithValue("X1", -300);
+                            command.Parameters.AddWithValue("Y1", -300);
+                            command.Parameters.AddWithValue("X2", -300);
+                            command.Parameters.AddWithValue("Y2", -300);
+                            command.Parameters.AddWithValue("X3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 6].Text));
+                            command.Parameters.AddWithValue("Y3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 7].Text));
+
+                            break;
+                        case "3 точки":
+                            command.Parameters.AddWithValue("X0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 0].Text));
+                            command.Parameters.AddWithValue("Y0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 1].Text));
+                            command.Parameters.AddWithValue("X1", Convert.ToDouble(listOfTextBoxes[(i * 8) + 2].Text));
+                            command.Parameters.AddWithValue("Y1", Convert.ToDouble(listOfTextBoxes[(i * 8) + 3].Text));
+                            command.Parameters.AddWithValue("X2", -300);
+                            command.Parameters.AddWithValue("Y2", -300);
+                            command.Parameters.AddWithValue("X3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 6].Text));
+                            command.Parameters.AddWithValue("Y3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 7].Text));
+
+                            break;
+                        case "4 точки":
+                            command.Parameters.AddWithValue("X0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 0].Text));
+                            command.Parameters.AddWithValue("Y0", Convert.ToDouble(listOfTextBoxes[(i * 8) + 1].Text));
+                            command.Parameters.AddWithValue("X1", Convert.ToDouble(listOfTextBoxes[(i * 8) + 2].Text));
+                            command.Parameters.AddWithValue("Y1", Convert.ToDouble(listOfTextBoxes[(i * 8) + 3].Text));
+                            command.Parameters.AddWithValue("X2", Convert.ToDouble(listOfTextBoxes[(i * 8) + 4].Text));
+                            command.Parameters.AddWithValue("Y2", Convert.ToDouble(listOfTextBoxes[(i * 8) + 5].Text));
+                            command.Parameters.AddWithValue("X3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 6].Text));
+                            command.Parameters.AddWithValue("Y3", Convert.ToDouble(listOfTextBoxes[(i * 8) + 7].Text));
+
+                            break;
+                    }
+                    // Добавляем все значения в БД
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Заполните все поля координат точек!");
+            }
+
+        }
+
+        // Метод удаления строки для ввода значений одной линии
+        private void deleteRowsFromForm()
+        {
+            // Удаляем комбобоксы
+            listOfComboBoxes.Last().Dispose();
+            listOfComboBoxes.Remove(listOfComboBoxes.Last());
+
+            // Удаляем текстовые поля для задания цветовых групп
+            listOfTextBoxesForColor.Last().Dispose();
+            listOfTextBoxesForColor.Remove(listOfTextBoxesForColor.Last());
+            listOfTextBoxesForColor.Last().Dispose();
+            listOfTextBoxesForColor.Remove(listOfTextBoxesForColor.Last());
+
+            // Удаляем текстовые поля для задания координат точек
+            // Первое поле
+            listOfTextBoxes.Last().Dispose();
+            listOfTextBoxes.Remove(listOfTextBoxes.Last());
+            // Второе поле
+            listOfTextBoxes.Last().Dispose();
+            listOfTextBoxes.Remove(listOfTextBoxes.Last());
+            // Третье поле
+            listOfTextBoxes.Last().Dispose();
+            listOfTextBoxes.Remove(listOfTextBoxes.Last());
+            // Четвёртое поле
+            listOfTextBoxes.Last().Dispose();
+            listOfTextBoxes.Remove(listOfTextBoxes.Last());
+            // Пятое поле
+            listOfTextBoxes.Last().Dispose();
+            listOfTextBoxes.Remove(listOfTextBoxes.Last());
+            // Шестое поле
+            listOfTextBoxes.Last().Dispose();
+            listOfTextBoxes.Remove(listOfTextBoxes.Last());
+            // Седьмое поле
+            listOfTextBoxes.Last().Dispose();
+            listOfTextBoxes.Remove(listOfTextBoxes.Last());
+            // Восьмое поле
+            listOfTextBoxes.Last().Dispose();
+            listOfTextBoxes.Remove(listOfTextBoxes.Last());
+
+            // Удаляем номера строк
+            listOfLabels.Last().Dispose();
+            listOfLabels.Remove(listOfLabels.Last());
         }
     }
 }

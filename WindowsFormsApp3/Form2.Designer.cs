@@ -48,6 +48,9 @@ namespace WindowsFormsApp3
             this.buttonChangeNumberOfPoints = new System.Windows.Forms.Button();
             this.nameOfDiagram = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.deleteLineButton = new System.Windows.Forms.Button();
+            this.numberOfColorGroup1 = new System.Windows.Forms.TextBox();
+            this.numberOfColorGroup2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonAddDiagram
@@ -67,7 +70,7 @@ namespace WindowsFormsApp3
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(44, 20);
             this.textBox1.TabIndex = 3;
-            this.textBox1.Text = "2";
+            this.textBox1.Text = "0";
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // textBox2
@@ -76,7 +79,7 @@ namespace WindowsFormsApp3
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(44, 20);
             this.textBox2.TabIndex = 4;
-            this.textBox2.Text = "0,1";
+            this.textBox2.Text = "1539";
             // 
             // textBox3
             // 
@@ -84,7 +87,7 @@ namespace WindowsFormsApp3
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(44, 20);
             this.textBox3.TabIndex = 5;
-            this.textBox3.Text = "4";
+            this.textBox3.Text = "0,26";
             // 
             // textBox4
             // 
@@ -92,7 +95,7 @@ namespace WindowsFormsApp3
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(44, 20);
             this.textBox4.TabIndex = 6;
-            this.textBox4.Text = "3";
+            this.textBox4.Text = "1520";
             // 
             // label1
             // 
@@ -106,7 +109,7 @@ namespace WindowsFormsApp3
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(950, 17);
+            this.label2.Location = new System.Drawing.Point(929, 17);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(82, 14);
             this.label2.TabIndex = 8;
@@ -115,7 +118,7 @@ namespace WindowsFormsApp3
             // buttonAddLine
             // 
             this.buttonAddLine.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonAddLine.Location = new System.Drawing.Point(329, 727);
+            this.buttonAddLine.Location = new System.Drawing.Point(326, 662);
             this.buttonAddLine.Name = "buttonAddLine";
             this.buttonAddLine.Size = new System.Drawing.Size(169, 29);
             this.buttonAddLine.TabIndex = 9;
@@ -125,7 +128,7 @@ namespace WindowsFormsApp3
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(832, 41);
+            this.textBox5.Location = new System.Drawing.Point(823, 41);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(44, 20);
             this.textBox5.TabIndex = 11;
@@ -133,7 +136,7 @@ namespace WindowsFormsApp3
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(882, 41);
+            this.textBox6.Location = new System.Drawing.Point(873, 41);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(44, 20);
             this.textBox6.TabIndex = 10;
@@ -141,19 +144,19 @@ namespace WindowsFormsApp3
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(943, 41);
+            this.textBox7.Location = new System.Drawing.Point(932, 41);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(44, 20);
             this.textBox7.TabIndex = 13;
-            this.textBox7.Text = "8,8";
+            this.textBox7.Text = "0,51";
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(993, 41);
+            this.textBox8.Location = new System.Drawing.Point(982, 41);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(44, 20);
             this.textBox8.TabIndex = 12;
-            this.textBox8.Text = "7,7";
+            this.textBox8.Text = "1499";
             // 
             // comboBox1
             // 
@@ -164,7 +167,7 @@ namespace WindowsFormsApp3
             "2 точки",
             "3 точки",
             "4 точки"});
-            this.comboBox1.Location = new System.Drawing.Point(1070, 39);
+            this.comboBox1.Location = new System.Drawing.Point(1111, 39);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(86, 22);
             this.comboBox1.TabIndex = 14;
@@ -201,7 +204,7 @@ namespace WindowsFormsApp3
             // nameOfDiagram
             // 
             this.nameOfDiagram.Font = new System.Drawing.Font("Times New Roman", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.nameOfDiagram.Location = new System.Drawing.Point(1196, 136);
+            this.nameOfDiagram.Location = new System.Drawing.Point(1225, 136);
             this.nameOfDiagram.Name = "nameOfDiagram";
             this.nameOfDiagram.Size = new System.Drawing.Size(205, 30);
             this.nameOfDiagram.TabIndex = 18;
@@ -211,17 +214,46 @@ namespace WindowsFormsApp3
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Times New Roman", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(1201, 111);
+            this.label4.Location = new System.Drawing.Point(1230, 111);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(191, 22);
             this.label4.TabIndex = 19;
             this.label4.Text = "Название диаграммы";
+            // 
+            // deleteLineButton
+            // 
+            this.deleteLineButton.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.deleteLineButton.Location = new System.Drawing.Point(326, 706);
+            this.deleteLineButton.Name = "deleteLineButton";
+            this.deleteLineButton.Size = new System.Drawing.Size(169, 29);
+            this.deleteLineButton.TabIndex = 20;
+            this.deleteLineButton.Text = "Удалить линию";
+            this.deleteLineButton.UseVisualStyleBackColor = true;
+            this.deleteLineButton.Click += new System.EventHandler(this.deleteLineButton_Click);
+            // 
+            // numberOfColorGroup1
+            // 
+            this.numberOfColorGroup1.Location = new System.Drawing.Point(1043, 42);
+            this.numberOfColorGroup1.Name = "numberOfColorGroup1";
+            this.numberOfColorGroup1.Size = new System.Drawing.Size(28, 20);
+            this.numberOfColorGroup1.TabIndex = 21;
+            this.numberOfColorGroup1.Text = "1";
+            // 
+            // numberOfColorGroup2
+            // 
+            this.numberOfColorGroup2.Location = new System.Drawing.Point(1077, 42);
+            this.numberOfColorGroup2.Name = "numberOfColorGroup2";
+            this.numberOfColorGroup2.Size = new System.Drawing.Size(28, 20);
+            this.numberOfColorGroup2.TabIndex = 22;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1442, 768);
+            this.Controls.Add(this.numberOfColorGroup2);
+            this.Controls.Add(this.numberOfColorGroup1);
+            this.Controls.Add(this.deleteLineButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.nameOfDiagram);
             this.Controls.Add(this.buttonChangeNumberOfPoints);
@@ -269,5 +301,8 @@ namespace WindowsFormsApp3
         private System.Windows.Forms.Button buttonChangeNumberOfPoints;
         private System.Windows.Forms.TextBox nameOfDiagram;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button deleteLineButton;
+        private System.Windows.Forms.TextBox numberOfColorGroup1;
+        private System.Windows.Forms.TextBox numberOfColorGroup2;
     }
 }

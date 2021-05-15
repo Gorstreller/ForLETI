@@ -33,7 +33,7 @@ namespace WindowsFormsApp3
             this.formsPlot1 = new ScottPlot.FormsPlot();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.clearPlotButton = new System.Windows.Forms.Button();
             this.mainBuildingButton = new System.Windows.Forms.Button();
             this.x0 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -195,15 +195,15 @@ namespace WindowsFormsApp3
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
+            // clearPlotButton
             // 
-            this.button3.Location = new System.Drawing.Point(1329, 415);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(136, 47);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Очистить";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.clearPlotButton.Location = new System.Drawing.Point(1329, 415);
+            this.clearPlotButton.Name = "clearPlotButton";
+            this.clearPlotButton.Size = new System.Drawing.Size(136, 47);
+            this.clearPlotButton.TabIndex = 3;
+            this.clearPlotButton.Text = "Очистить";
+            this.clearPlotButton.UseVisualStyleBackColor = true;
+            this.clearPlotButton.Click += new System.EventHandler(this.clearPlotButton_Click);
             // 
             // mainBuildingButton
             // 
@@ -1355,6 +1355,7 @@ namespace WindowsFormsApp3
             // 
             // Form1
             // 
+            this.AcceptButton = this.fullDiagram;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1569, 788);
@@ -1376,7 +1377,7 @@ namespace WindowsFormsApp3
             this.Controls.Add(this.OY);
             this.Controls.Add(this.OX);
             this.Controls.Add(this.mainBuildingButton);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.clearPlotButton);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.formsPlot1);
@@ -1405,7 +1406,7 @@ namespace WindowsFormsApp3
         private ScottPlot.FormsPlot formsPlot1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button clearPlotButton;
         private System.Windows.Forms.Button mainBuildingButton;
         private System.Windows.Forms.TextBox x0;
         private System.Windows.Forms.Label label1;

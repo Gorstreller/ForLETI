@@ -16,8 +16,8 @@ namespace WindowsFormsApp3
 {
     public partial class Form1 : Form
     {
-        private SqlConnection sqlConnection = null;
-        private SqlCommand commandForGettingPoint = null;
+        public SqlConnection sqlConnection = null;
+        public SqlCommand commandForGettingPoint = null;
         private string queryForGettingPoint;
 
         public Form1()
@@ -36,66 +36,7 @@ namespace WindowsFormsApp3
             }*/
         }
 
-        private double[,] MakeSystem(double[,] xyTable, int basis)
-        {
-            double[,] matrix = new double[basis, basis + 1];
-            for (int i = 0; i < basis; i++)
-            {
-                for (int j = 0; j < basis; j++)
-                {
-                    matrix[i, j] = 0;
-                }
-            }
-            for (int i = 0; i < basis; i++)
-            {
-                for (int j = 0; j < basis; j++)
-                {
-                    double sumA = 0, sumB = 0;
-                    for (int k = 0; k < xyTable.Length / 2; k++)
-                    {
-                        sumA += Math.Pow(xyTable[0, k], i) * Math.Pow(xyTable[0, k], j);
-                        sumB += xyTable[1, k] * Math.Pow(xyTable[0, k], i);
-                    }
-                    matrix[i, j] = sumA;
-                    matrix[i, basis] = sumB;
-                }
-            }
-            return matrix;
-        }
-
-        private double[] lagrangeForSevenPoints()
-        {
-            double x0, x1, x2, x3, x4, x5, x6, y0, y1, y2, y3, y4, y5, y6;
-            // Вытаскиваем значения из полей
-            if (double.TryParse(this.x0.Text, out x0) &&
-                double.TryParse(this.y0.Text, out y0) &&
-                double.TryParse(this.x1.Text, out x1) &&
-                double.TryParse(this.y1.Text, out y1) &&
-                double.TryParse(this.x2.Text, out x2) &&
-                double.TryParse(this.y2.Text, out y2) &&
-                double.TryParse(this.x3.Text, out x4) &&
-                double.TryParse(this.y3.Text, out y3) &&
-                double.TryParse(this.x4.Text, out x4) &&
-                double.TryParse(this.y4.Text, out y4) &&
-                double.TryParse(this.x5.Text, out x5) &&
-                double.TryParse(this.y5.Text, out y5) &&
-                double.TryParse(this.x6.Text, out x6) &&
-                double.TryParse(this.y6.Text, out y6))
-            {
-                double stepX = Math.Abs((x6 - x0) / 1000);
-                double[] arrayX = new double[1000];
-                double[] arrayY = new double[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    arrayX[i] = x0 + (stepX * i);
-
-                }
-
-            }
-                double[] a = new double[] { };
-            return a;
-        }
-
+        // Нажатие на кнопку "Просто по точкам"
         private void button1_Click(object sender, EventArgs e)
         {
             double[] dataX_AB = new double[] { 0, 0.16, 0.25, 0.39, 0.51 };
@@ -147,16 +88,18 @@ namespace WindowsFormsApp3
             formsPlot1.Render();
         }
 
+        // Метод для вывода координат мышки в текст-боксы
         private void formsPlot1_MouseMove(object sender, MouseEventArgs e)
         {
             // determine point nearest the cursor
             (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
             OX.Text = Math.Round(mouseCoordX, 2).ToString();
             OY.Text = Math.Round(mouseCoordY, 2).ToString();
-            formsPlot1.Render();
+            //formsPlot1.Render();
         }
 
-            private void button2_Click(object sender, EventArgs e)
+        // Нажатие на кнопку "Кубический сплайн"
+        private void button2_Click(object sender, EventArgs e)
         {
             // Задаём координаты точек для построения
             float[] dataX_AB = new float[] { 0, 0.16f, 0.25f, 0.39f, 0.51f };
@@ -251,44 +194,17 @@ namespace WindowsFormsApp3
             formsPlot1.Render();
         }
 
-        private void DrawBezierPoint(PaintEventArgs e)
-        {
-            Point[] p =
-            {
-                new Point(10, 100),
-                new Point(75, 10),
-                new Point(80, 50),
-                new Point(100, 150),
-                new Point(125, 80),
-                new Point(175, 200),
-                new Point(200, 80)
-            };
-            Pen pen = new Pen(Color.Blue);
-            e.Graphics.DrawBeziers(pen, p);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
+        // Нажатие на кнопку "Очистить"
+        private void clearPlotButton_Click(object sender, EventArgs e)
         {
             formsPlot1.plt.Clear();
             formsPlot1.Render();
         }
 
+        // Нажатие на кнопку "Безье"
         private void mainBuildingButton_Click(object sender, EventArgs e)
         {
             bezierBuilding();
-
-            /*Func<double, double> bezier = x => x * 2;
-            Console.WriteLine(bezier(2));
-            double[] cordinateX = new[] { 0d };
-            for (double i = 0.01; i <= 2; i += 0.01)
-            {
-                cordinateX.Append(i);
-            }
-            double[] cordinateY = new[] { bezier(0d) };
-            for (int j = 1; j <= cordinateX.Length; j++)
-            {
-                cordinateY.Append(bezier(cordinateX[j]));
-            }*/
         }
 
 
@@ -297,13 +213,15 @@ namespace WindowsFormsApp3
 
         }
 
+        // Нажатие на кнопку "Добавить"
         private void button4_Click(object sender, EventArgs e)
         {
-            Form2 form2 = new Form2();
-            form2.Show();
-            //
+            AuthorizationForm authorizationForm = new AuthorizationForm();
+            authorizationForm.Show();
         }
 
+        // МЕТОД НА УДАЛЕНИЕ!!!
+        // Перегрузка построения по Безье без параметров
         private void bezierBuilding()
         {
             double P0x, P1xBefore, P3x, P0y, Py, P3y;
@@ -349,9 +267,9 @@ namespace WindowsFormsApp3
 
                     if (arrayForCheckX.Contains(P1xBefore) && arrayForCheckY[Array.IndexOf(arrayForCheckX, P1xBefore)] == Py)
                     {
-                        formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Aqua, markerSize: 0);
-                        formsPlot1.plt.Axis(0, 4.4, 1100, 1550);
-                        formsPlot1.plt.AxisBounds(0, 4.4, 1100, 1550);
+                        formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Black, markerSize: 2);
+                        formsPlot1.plt.Axis(0, 7, 600, 1600);
+                        formsPlot1.plt.AxisBounds(0, 7, 600, 1600);
                         formsPlot1.Render();
                         break;
                     }
@@ -359,62 +277,453 @@ namespace WindowsFormsApp3
             }
             else
             {
-                this.x0.Text = "Вы ввели неверное значение!";
+                x0.Text = "Вы ввели неверное значение!";
             }
+        }
+
+        // Перегрузка построения по Безье для трёх точек
+        private List<double[]> bezierBuilding(double P0x, double P0y, double P1xBefore, double Py, double P3x, double P3y)
+        {
+            double[] arrayForCheckY = new double[10001];
+            double[] arrayForCheckX = new double[10001];
+            // Создаём два массива для значений по обеим осям + счётчик номера элемента
+            double[] arrayX = new double[10001];
+            double[] arrayY = new double[10001];
+            int i;
+
+            double P1yBefore, P1x, P1y, P2x, P2y;
+            for (double j = 0.50; j < 0.999; j += 0.001)
+            {
+                // Высчитываем координату y для одной направляющей точки
+                P1yBefore = ((Py - (0.25 * P0y)) / j);
+                // Пересчитываем координаты для двух направляющих точек
+                P1x = P0x + ((2 * (P1xBefore - P0x)) / 3);
+                P1y = P0y + ((2 * (P1yBefore - P0y)) / 3);
+                P2x = P1xBefore + ((P3x - P1xBefore) / 3);
+                P2y = P1yBefore + ((P3y - P1yBefore) / 3);
+                i = 0;
+                // Заполняем массивы по формулам построения кривых Безье
+                for (double t = 0; t <= 1; t += 0.0001)
+                {
+                    arrayX[i] = Math.Pow((1 - t), 3) * P0x + 3 * t * Math.Pow((1 - t), 2) * P1x
+                        + 3 * Math.Pow(t, 2) * (1 - t) * P2x + Math.Pow(t, 3) * P3x;
+                    arrayY[i] = Math.Pow((1 - t), 3) * P0y + 3 * t * Math.Pow((1 - t), 2) * P1y
+                        + 3 * Math.Pow(t, 2) * (1 - t) * P2y + Math.Pow(t, 3) * P3y;
+
+
+                    arrayForCheckX[i] = Math.Round(arrayX[i], 2);
+                    arrayForCheckY[i] = Math.Round(arrayY[i]);
+
+                    i++;
+                }
+
+                if (arrayForCheckX.Contains(P1xBefore) && arrayForCheckY[Array.IndexOf(arrayForCheckX, P1xBefore)] == Py)
+                {
+                    formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Black, markerSize: 0);
+                    formsPlot1.plt.Axis(0, 7, 600, 1600);
+                    formsPlot1.plt.AxisBounds(0, 7, 600, 1600);
+                    formsPlot1.Render();
+                    break;
+                }
+            }
+            return new List<double[]> { arrayX, arrayY };
+        }
+
+        // Перегрузка построения по Безье для четырёх точек
+        private List<double[]> bezierBuilding(double P0x, double P0y, double P1xBefore, double Py, double P2xCheck, double P2yCheck, double P3x, double P3y)
+        {
+            double[] arrayForCheckY = new double[10001];
+            double[] arrayForCheckX = new double[10001];
+            // Создаём два массива для значений по обеим осям + счётчик номера элемента
+            double[] arrayX = new double[10001];
+            double[] arrayY = new double[10001];
+            int i;
+
+            double P1yBefore, P1x, P1y, P2x, P2y;
+            for (double j = 0.50; j < 0.999; j += 0.001)
+            {
+                // Высчитываем координату y для одной направляющей точки
+                P1yBefore = ((Py - (0.25 * P0y)) / j);
+                // Пересчитываем координаты для двух направляющих точек
+                P1x = P0x + ((2 * (P1xBefore - P0x)) / 3);
+                P1y = P0y + ((2 * (P1yBefore - P0y)) / 3);
+                P2x = P1xBefore + ((P3x - P1xBefore) / 3);
+                P2y = P1yBefore + ((P3y - P1yBefore) / 3);
+                i = 0;
+                // Заполняем массивы по формулам построения кривых Безье
+                for (double t = 0; t <= 1; t += 0.0001)
+                {
+                    arrayX[i] = Math.Pow((1 - t), 3) * P0x + 3 * t * Math.Pow((1 - t), 2) * P1x
+                        + 3 * Math.Pow(t, 2) * (1 - t) * P2x + Math.Pow(t, 3) * P3x;
+                    arrayY[i] = Math.Pow((1 - t), 3) * P0y + 3 * t * Math.Pow((1 - t), 2) * P1y
+                        + 3 * Math.Pow(t, 2) * (1 - t) * P2y + Math.Pow(t, 3) * P3y;
+
+
+                    arrayForCheckX[i] = Math.Round(arrayX[i], 2);
+                    arrayForCheckY[i] = Math.Round(arrayY[i]);
+
+                    i++;
+                }
+
+                if (arrayForCheckX.Contains(P1xBefore) && arrayForCheckY[Array.IndexOf(arrayForCheckX, P1xBefore)] == Py)
+                {
+                    formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Black, markerSize: 0);
+                    formsPlot1.plt.Axis(0, 7, 600, 1600);
+                    formsPlot1.plt.AxisBounds(0, 7, 600, 1600);
+                    formsPlot1.Render();
+                    break;
+                }
+            }
+            return new List<double[]> { arrayX, arrayY };
+        }
+
+        // Перегрузка построения по Безье для двух точек
+        private List<double[]> bezierBuilding(double P0x, double P0y, double P3x, double P3y)
+        {
+            // Создаём два массива для значений по обеим осям + счётчик номера элемента
+            double[] arrayX = new double[2];
+            double[] arrayY = new double[2];
+
+            arrayX[0] = P0x;
+            arrayX[1] = P3x;
+
+            arrayY[0] = P0y;
+            arrayY[1] = P3y;
+
+            formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Black, markerSize: 0);
+            formsPlot1.plt.Axis(0, 7, 600, 1600);
+            /*formsPlot1.plt.AxisBounds(0, 4.4, 1100, 1550);*/
+            formsPlot1.Render();
+            return new List<double[]> { arrayX, arrayY };
         }
 
         private void fullDiagram_Click(object sender, EventArgs e)
         {
-            string queryForCount = String.Format("SELECT COUNT(*) FROM {0}", nameOfDiagram.Text);
-            SqlCommand commandForCount = new SqlCommand(queryForCount, sqlConnection);
-            int numberOfRows = (int) commandForCount.ExecuteScalar();
 
-            for (int i = 3; i <= 3; i++)
-            {
-                double X0 = getPointFromDB("X0", i);
-                double Y0 = getPointFromDB("Y0", i);
-                double X1 = getPointFromDB("X1", i);
-                double Y1 = getPointFromDB("Y1", i);
-                double X2 = getPointFromDB("X2", i);
-                double Y2 = getPointFromDB("Y2", i);
-                double X3 = getPointFromDB("X3", i);
-                double Y3 = getPointFromDB("Y3", i);
+            fillAreas();
+            //string queryForGettingPoints = string.Format("SELECT MAX(NumberOfColorGroup2) FROM [{0}]", nameOfDiagram.Text.Replace("-", ""));
+            //SqlCommand commandForCount = new SqlCommand(queryForGettingPoints, sqlConnection);
+            //int count = (int)commandForCount.ExecuteScalar();
 
-                pointX0.Text = X0.ToString();
-                pointY0.Text = Y0.ToString();
-                pointX1.Text = X1.ToString();
-                pointY1.Text = Y1.ToString();
-                pointX2.Text = X2.ToString();
-                pointY2.Text = Y2.ToString();
-                pointX3.Text = X3.ToString();
-                pointY3.Text = Y3.ToString();
-            }
+            //double X0, Y0, X1, Y1, X2, Y2, X3, Y3;
+            //List<double[]> listOfBezierMassives;
+            //List<double[]> massivesX = new List<double[]> { };
+            //List<double[]> massivesY = new List<double[]> { };
 
-            /*for (int i = 1; i <= 5; i++)
-            {
-                
-            }*/
-            /*SqlCommand command = new SqlCommand();
-            string query1 = "SELECT X0 FROM Test1 WHERE Id = 4";
-            command.CommandText = query1;
-            command.Connection = sqlConnection;
+            ////new MethodsForButtons().fillArea(Color.Magenta, formsPlot1, nameOfDiagram);
 
-            var result = command.ExecuteScalar().ToString();*/
-            /*
-                        nameOfDiagram.Text = result;*/
+            //for (int i = 1; i <= count; i++)
+            //{
+            //    X0 = getPointFromDB("X0", i);
+            //    Y0 = getPointFromDB("Y0", i);
+            //    X1 = getPointFromDB("X1", i);
+            //    Y1 = getPointFromDB("Y1", i);
+            //    X2 = getPointFromDB("X2", i);
+            //    Y2 = getPointFromDB("Y2", i);
+            //    X3 = getPointFromDB("X3", i);
+            //    Y3 = getPointFromDB("Y3", i);
 
-            SqlCommand command1 = new SqlCommand("SELECT COUNT(*) FROM Test1", sqlConnection);
-            int count = (int) command1.ExecuteScalar();
-            nameOfDiagram.Text = count.ToString();
-
-            /*string new = dataAdapter*/
+            //    if (X1 == -300 && X2 == -300)
+            //    {
+            //        listOfBezierMassives = bezierBuilding(X0, Y0, X3, Y3);
+            //        massivesX.Add(listOfBezierMassives[0]);
+            //        massivesY.Add(listOfBezierMassives[1]);
+            //    }
+            //    else if (X1 != -300 && X2 == -300)
+            //    {
+            //        listOfBezierMassives = bezierBuilding(X0, Y0, X1, Y1, X3, Y3);
+            //        massivesX.Add(listOfBezierMassives[0]);
+            //        massivesY.Add(listOfBezierMassives[1]);
+            //    }
+            //    else
+            //    {
+            //        listOfBezierMassives = bezierBuilding(X0, Y0, X1, Y1, X2, Y2, X3, Y3);
+            //        massivesX.Add(listOfBezierMassives[0]);
+            //        massivesY.Add(listOfBezierMassives[1]);
+            //    }
+            //}
         }
 
-        private double getPointFromDB(string nameOfPoint, int id)
+        // Метод для получения точки из БД
+        private List<double> getPointFromDB(string nameOfPoint, int NumberOfColorGroup)
         {
-            queryForGettingPoint = String.Format("SELECT {0} FROM Test1 WHERE Id = {1}", nameOfPoint, id);
+            queryForGettingPoint = string.Format("SELECT {0} FROM {1} WHERE NumberOfColorGroup1 = {2}" +
+                " OR NumberOfColorGroup2 = {2}", nameOfPoint, nameOfDiagram.Text.Replace("-", ""), NumberOfColorGroup);
             commandForGettingPoint = new SqlCommand(queryForGettingPoint, sqlConnection);
-            return (double) commandForGettingPoint.ExecuteScalar();
+            List<double> listOfPoints = new List<double> { };
+            SqlDataReader sqlDataReader = commandForGettingPoint.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                listOfPoints.Add(Convert.ToDouble($"{sqlDataReader[nameOfPoint]}"));
+            }
+            if (sqlDataReader != null)
+            {
+                sqlDataReader.Close();
+            }
+            return listOfPoints;
+        }
+
+        public void fillAreas()
+        {
+            var listOfBezierMassives = new List<double[]> { };
+            var massivesX = new List<double[]> { };
+            var massivesY = new List<double[]> { };
+
+
+            string queryForGettingPoints = string.Format("SELECT MAX(NumberOfColorGroup1) FROM [{0}]", nameOfDiagram.Text.Replace("-", ""));
+            SqlCommand commandForCount = new SqlCommand(queryForGettingPoints, sqlConnection);
+            int numberOfAreas = (int)commandForCount.ExecuteScalar();
+
+            // Перебор областей, то есть групп
+            for (int i = 1; i <= numberOfAreas; i++)
+            {
+                //oneAreaMassives.Clear();
+                //listOfBezierMassives.Clear();
+                //massivesX.Clear();
+                //massivesY.Clear();
+                //massivesForPolygonX.Clear();
+                // Считаем, сколько строк принадлежат одной группе
+                string queryForCountOneGroupRows = string.Format("SELECT COUNT(*) FROM [{0}] WHERE NumberOfColorGroup1 = {1}" +
+                    " OR NumberOfColorGroup2 = {1}", nameOfDiagram.Text.Replace("-", ""), i);
+                SqlCommand commandForCountOneGroupRows = new SqlCommand(queryForCountOneGroupRows, sqlConnection);
+                int numberOfOneGroupRows = (int)commandForCountOneGroupRows.ExecuteScalar();
+                // Определяем id первого элемента с нужной группой
+                string queryForId = string.Format("SELECT Id FROM [{0}] WHERE NumberOfColorGroup1 = {1}" +
+                    " OR NumberOfColorGroup2 = {1}", nameOfDiagram.Text.Replace("-", ""), i);
+                SqlCommand commandForId = new SqlCommand(queryForCountOneGroupRows, sqlConnection);
+                int id = (int)commandForId.ExecuteScalar();
+                var X0 = getPointFromDB("X0", i);
+                var Y0 = getPointFromDB("Y0", i);
+                var X1 = getPointFromDB("X1", i);
+                var Y1 = getPointFromDB("Y1", i);
+                var X2 = getPointFromDB("X2", i);
+                var Y2 = getPointFromDB("Y2", i);
+                var X3 = getPointFromDB("X3", i);
+                var Y3 = getPointFromDB("Y3", i);
+
+                // Перебор строк в одной области
+                for (int j = 0; j < numberOfOneGroupRows; j++)
+                {
+
+                    if (X1[j] == -300 && X2[j] == -300)
+                    {
+                        listOfBezierMassives = bezierMassives(X0[j], Y0[j], X3[j], Y3[j]);
+                        massivesX.Add(listOfBezierMassives[0]);
+                        massivesY.Add(listOfBezierMassives[1]);
+                    }
+                    else if (X1[j] != -300 && X2[j] == -300)
+                    {
+                        listOfBezierMassives = bezierMassives(X0[j], Y0[j], X1[j], Y1[j], X3[j], Y3[j]);
+                        massivesX.Add(listOfBezierMassives[0]);
+                        massivesY.Add(listOfBezierMassives[1]);
+                    }
+                }
+
+                buildingPolygon(massivesX, massivesY);
+            }
+
+            //x.Add(bezierMassives(1, 2, 3, 4)[0]);
+            //x.Add(bezierMassives(1, 2, 3, 4)[1]);
+
+        }
+
+        public void buildingPolygon(List<double[]> listOfMassivesX, List<double[]> listOfMassivesY)
+        {
+            var massivesForPolygonX = new List<double[]> { };
+            var massivesForPolygonY = new List<double[]> { };
+
+            massivesForPolygonX.Add(listOfMassivesX[0]);
+            listOfMassivesX.RemoveAt(0);
+            massivesForPolygonY.Add(listOfMassivesY[0]);
+            listOfMassivesY.RemoveAt(0);
+
+            int listLength = listOfMassivesX.Count();
+            for (int i = 0; i < listLength; i++)
+            {
+                for (int j = 0; j < listOfMassivesX.Count(); j++)
+                {
+                    if (massivesForPolygonX.Count() == i)
+                    {
+                        return;
+                    }
+                    if (Math.Round(listOfMassivesX[j][0], 2) == Math.Round(massivesForPolygonX[i][massivesForPolygonX[i].Count() - 1], 2) &&
+                        Math.Round(listOfMassivesY[j][0], 2) == Math.Round(massivesForPolygonY[i][massivesForPolygonY[i].Count() - 1], 2))
+                    {
+                        massivesForPolygonX.Add(listOfMassivesX[j]);
+                        listOfMassivesX.Remove(listOfMassivesX[j]);
+
+                        massivesForPolygonY.Add(listOfMassivesY[j]);
+                        listOfMassivesY.Remove(listOfMassivesY[j]);
+                        break;
+                    }
+                    else if (Math.Round(listOfMassivesX[j][listOfMassivesX[j].Count() - 1], 2) == Math.Round(massivesForPolygonX[i][massivesForPolygonX[i].Count() - 1], 2) &&
+                        Math.Round(listOfMassivesY[j][listOfMassivesY[j].Count() - 1], 2) == Math.Round(massivesForPolygonY[i][massivesForPolygonY[i].Count() - 1], 2))
+                    {
+                        massivesForPolygonX.Add(reversedArray(listOfMassivesX[j]));
+                        listOfMassivesX.Remove(listOfMassivesX[j]);
+
+                        massivesForPolygonY.Add(reversedArray(listOfMassivesY[j]));
+                        listOfMassivesY.Remove(listOfMassivesY[j]);
+                        break;
+                    }
+                    //else
+                    //{
+                    //    return;
+                    //}
+                }
+            }
+            if (listOfMassivesX.Count() != 0)
+            {
+                return;
+            }
+            // Объединяем массивы, заливая их в новый unitedMassives
+            double[] unitedMassiveX = uniteMassives(massivesForPolygonX);
+            double[] unitedMassiveY = uniteMassives(massivesForPolygonY);
+
+            // Строим один полигон
+            formsPlot1.plt.PlotPolygon(
+                    xs: unitedMassiveX,
+                    ys: unitedMassiveY,
+                    lineWidth: 2,
+                    fillAlpha: .5,
+                    lineColor: Color.Black);
+            formsPlot1.plt.Axis(0, 7, 600, 1600);
+            formsPlot1.plt.AxisBounds(0, 7, 600, 1600);
+            formsPlot1.Render();
+        }
+
+        // МЕТОД ДЛЯ ДОРАБОТКИ!!!
+        // Метод для расчёта массивов при построении кривых Безье по трём точкам
+        public List<double[]> bezierMassives(double P0x, double P0y, double P1xBefore, double Py, double P3x, double P3y)
+        {
+            double[] arrayForCheckY = new double[10001];
+            double[] arrayForCheckX = new double[10001];
+            // Создаём два массива для значений по обеим осям + счётчик номера элемента
+            double[] arrayX = new double[10001];
+            double[] arrayY = new double[10001];
+            int i;
+
+            double P1yBefore, P1x, P1y, P2x, P2y;
+            for (double j = 0.55; j < 0.999; j += 0.001)
+            {
+                // Высчитываем координату y для одной направляющей точки
+                P1yBefore = ((Py - (0.25 * P0y)) / j);
+                // Пересчитываем координаты для двух направляющих точек
+                P1x = P0x + ((2 * (P1xBefore - P0x)) / 3);
+                P1y = P0y + ((2 * (P1yBefore - P0y)) / 3);
+                P2x = P1xBefore + ((P3x - P1xBefore) / 3);
+                P2y = P1yBefore + ((P3y - P1yBefore) / 3);
+                i = 0;
+                // Заполняем массивы по формулам построения кривых Безье
+                for (double t = 0; t <= 1; t += 0.0001)
+                {
+                    arrayX[i] = Math.Pow((1 - t), 3) * P0x + 3 * t * Math.Pow((1 - t), 2) * P1x
+                        + 3 * Math.Pow(t, 2) * (1 - t) * P2x + Math.Pow(t, 3) * P3x;
+                    arrayY[i] = Math.Pow((1 - t), 3) * P0y + 3 * t * Math.Pow((1 - t), 2) * P1y
+                        + 3 * Math.Pow(t, 2) * (1 - t) * P2y + Math.Pow(t, 3) * P3y;
+
+
+                    arrayForCheckX[i] = Math.Round(arrayX[i], 2);
+                    arrayForCheckY[i] = Math.Round(arrayY[i]);
+
+                    i++;
+                }
+
+                if (arrayForCheckX.Contains(P1xBefore) && arrayForCheckY[Array.IndexOf(arrayForCheckX, P1xBefore)] == Py)
+                {
+                    return new List<double[]> { arrayX, arrayY };
+                }
+            }
+            return new List<double[]> { arrayX, arrayY };
+        }
+
+        // МЕТОД ДЛЯ ДОРАБОТКИ!!!
+        // Метод для расчёта массивов при построении кривых Безье по двум точкам
+        public List<double[]> bezierMassives(double P0x, double P0y, double P3x, double P3y)
+        {
+            // Создаём два массива для значений по обеим осям + счётчик номера элемента
+            double[] arrayX = new double[2];
+            double[] arrayY = new double[2];
+
+            arrayX[0] = P0x;
+            arrayX[1] = P3x;
+
+            arrayY[0] = P0y;
+            arrayY[1] = P3y;
+
+            return new List<double[]> { arrayX, arrayY };
+        }
+
+        // Метод сортировки и объединения массивов
+        public List<double[]> massiveSorting(List<double[]> listOfMassivesX, List<double[]> listOfMassivesY)
+        {
+            var massivesForPolygonX = new List<double[]> { };
+            var massivesForPolygonY = new List<double[]> { };
+
+            massivesForPolygonX.Add(listOfMassivesX[0]);
+            listOfMassivesX.RemoveAt(0);
+            massivesForPolygonY.Add(listOfMassivesY[0]);
+            listOfMassivesY.RemoveAt(0);
+
+            int listLength = listOfMassivesX.Count();
+            for (int i = 0; i < listLength; i++)
+            {
+                for (int j = 0; j < listOfMassivesX.Count(); j++)
+                {
+                    if (Math.Round(listOfMassivesX[j][0], 2) == Math.Round(massivesForPolygonX[i][massivesForPolygonX[i].Count() - 1], 2) &&
+                        Math.Round(listOfMassivesY[j][0], 2) == Math.Round(massivesForPolygonY[i][massivesForPolygonY[i].Count() - 1], 2))
+                    {
+                        massivesForPolygonX.Add(listOfMassivesX[j]);
+                        listOfMassivesX.Remove(listOfMassivesX[j]);
+
+                        massivesForPolygonY.Add(listOfMassivesY[j]);
+                        listOfMassivesY.Remove(listOfMassivesY[j]);
+                        break;
+                    }
+                    else if (Math.Round(listOfMassivesX[j][listOfMassivesX[j].Count() - 1], 2) == Math.Round(massivesForPolygonX[i][massivesForPolygonX[i].Count() - 1], 2) &&
+                        Math.Round(listOfMassivesY[j][listOfMassivesY[j].Count() - 1], 2) == Math.Round(massivesForPolygonY[i][massivesForPolygonY[i].Count() - 1], 2))
+                    {
+                        massivesForPolygonX.Add(reversedArray(listOfMassivesX[j]));
+                        listOfMassivesX.Remove(listOfMassivesX[j]);
+
+                        massivesForPolygonY.Add(reversedArray(listOfMassivesY[j]));
+                        listOfMassivesY.Remove(listOfMassivesY[j]);
+                        break;
+                    }
+                }
+            }
+            // Объединяем массивы, заливая их в новый unitedMassives
+            double[] unitedMassiveX = uniteMassives(massivesForPolygonX);
+            double[] unitedMassiveY = uniteMassives(massivesForPolygonY);
+
+            return new List<double[]> { unitedMassiveX, unitedMassiveY };
+        }
+
+
+
+        // Метод для объединения массивов 2.0
+        public double[] uniteMassives(List<double[]> massivesForUnion)
+        {
+            var unitedMassives = new double[] { };
+            unitedMassives = unitedMassives.Concat(massivesForUnion[0]).ToArray();
+            for (int i = 1; i < massivesForUnion.Count(); i++)
+            {
+                unitedMassives = unitedMassives.Concat(massivesForUnion[i]).ToArray();
+            }
+            return unitedMassives;
+        }
+
+        // Метод для разворота массивов
+        public double[] reversedArray(double[] array)
+        {
+            for (int i = 0; i < array.Length / 2; i++)
+            {
+                double tmp = array[i];
+                array[i] = array[array.Length - i - 1];
+                array[array.Length - i - 1] = tmp;
+            }
+            return array;
         }
     }
 }
