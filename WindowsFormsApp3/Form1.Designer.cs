@@ -149,14 +149,6 @@ namespace WindowsFormsApp3
             this.nameOfDiagram = new System.Windows.Forms.TextBox();
             this.label53 = new System.Windows.Forms.Label();
             this.fullDiagram = new System.Windows.Forms.Button();
-            this.pointX0 = new System.Windows.Forms.TextBox();
-            this.pointY0 = new System.Windows.Forms.TextBox();
-            this.pointX1 = new System.Windows.Forms.TextBox();
-            this.pointY1 = new System.Windows.Forms.TextBox();
-            this.pointX2 = new System.Windows.Forms.TextBox();
-            this.pointY2 = new System.Windows.Forms.TextBox();
-            this.pointX3 = new System.Windows.Forms.TextBox();
-            this.pointY3 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.sevenPoints.SuspendLayout();
             this.sixPoints.SuspendLayout();
@@ -1297,76 +1289,12 @@ namespace WindowsFormsApp3
             this.fullDiagram.UseVisualStyleBackColor = true;
             this.fullDiagram.Click += new System.EventHandler(this.fullDiagram_Click);
             // 
-            // pointX0
-            // 
-            this.pointX0.Location = new System.Drawing.Point(316, 708);
-            this.pointX0.Name = "pointX0";
-            this.pointX0.Size = new System.Drawing.Size(95, 20);
-            this.pointX0.TabIndex = 41;
-            // 
-            // pointY0
-            // 
-            this.pointY0.Location = new System.Drawing.Point(438, 708);
-            this.pointY0.Name = "pointY0";
-            this.pointY0.Size = new System.Drawing.Size(95, 20);
-            this.pointY0.TabIndex = 42;
-            // 
-            // pointX1
-            // 
-            this.pointX1.Location = new System.Drawing.Point(561, 708);
-            this.pointX1.Name = "pointX1";
-            this.pointX1.Size = new System.Drawing.Size(95, 20);
-            this.pointX1.TabIndex = 43;
-            // 
-            // pointY1
-            // 
-            this.pointY1.Location = new System.Drawing.Point(685, 708);
-            this.pointY1.Name = "pointY1";
-            this.pointY1.Size = new System.Drawing.Size(95, 20);
-            this.pointY1.TabIndex = 44;
-            // 
-            // pointX2
-            // 
-            this.pointX2.Location = new System.Drawing.Point(813, 708);
-            this.pointX2.Name = "pointX2";
-            this.pointX2.Size = new System.Drawing.Size(95, 20);
-            this.pointX2.TabIndex = 45;
-            // 
-            // pointY2
-            // 
-            this.pointY2.Location = new System.Drawing.Point(933, 708);
-            this.pointY2.Name = "pointY2";
-            this.pointY2.Size = new System.Drawing.Size(95, 20);
-            this.pointY2.TabIndex = 46;
-            // 
-            // pointX3
-            // 
-            this.pointX3.Location = new System.Drawing.Point(1063, 708);
-            this.pointX3.Name = "pointX3";
-            this.pointX3.Size = new System.Drawing.Size(95, 20);
-            this.pointX3.TabIndex = 47;
-            // 
-            // pointY3
-            // 
-            this.pointY3.Location = new System.Drawing.Point(1206, 708);
-            this.pointY3.Name = "pointY3";
-            this.pointY3.Size = new System.Drawing.Size(95, 20);
-            this.pointY3.TabIndex = 48;
-            // 
             // Form1
             // 
             this.AcceptButton = this.fullDiagram;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1569, 788);
-            this.Controls.Add(this.pointY3);
-            this.Controls.Add(this.pointX3);
-            this.Controls.Add(this.pointY2);
-            this.Controls.Add(this.pointX2);
-            this.Controls.Add(this.pointY1);
-            this.Controls.Add(this.pointX1);
-            this.Controls.Add(this.pointY0);
-            this.Controls.Add(this.pointX0);
             this.Controls.Add(this.fullDiagram);
             this.Controls.Add(this.label53);
             this.Controls.Add(this.nameOfDiagram);
@@ -1522,14 +1450,6 @@ namespace WindowsFormsApp3
         private System.Windows.Forms.TextBox nameOfDiagram;
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.Button fullDiagram;
-        private System.Windows.Forms.TextBox pointX0;
-        private System.Windows.Forms.TextBox pointY0;
-        private System.Windows.Forms.TextBox pointX1;
-        private System.Windows.Forms.TextBox pointY1;
-        private System.Windows.Forms.TextBox pointX2;
-        private System.Windows.Forms.TextBox pointY2;
-        private System.Windows.Forms.TextBox pointX3;
-        private System.Windows.Forms.TextBox pointY3;
     }
 }
 

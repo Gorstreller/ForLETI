@@ -614,5 +614,105 @@ namespace WindowsFormsApp3
             listOfLabels.Last().Dispose();
             listOfLabels.Remove(listOfLabels.Last());
         }
+
+        // Перегрузка построения по Безье для двух точек
+        private List<double[]> bezierBuilding(double P0x, double P0y, double P3x, double P3y)
+        {
+            // Создаём два массива для значений по обеим осям + счётчик номера элемента
+            double[] arrayX = new double[2];
+            double[] arrayY = new double[2];
+
+            arrayX[0] = P0x;
+            arrayX[1] = P3x;
+
+            arrayY[0] = P0y;
+            arrayY[1] = P3y;
+
+            formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Black, markerSize: 0);
+            formsPlot1.plt.Axis(0, 7, 600, 1600);
+            /*formsPlot1.plt.AxisBounds(0, 4.4, 1100, 1550);*/
+            formsPlot1.Render();
+            return new List<double[]> { arrayX, arrayY };
+        }
+
+        // Перегрузка построения по Безье для трёх точек
+        private List<double[]> bezierBuilding(double P0x, double P0y, double P1xBefore, double Py, double P3x, double P3y)
+        {
+            double[] arrayForCheckY = new double[10001];
+            double[] arrayForCheckX = new double[10001];
+            // Создаём два массива для значений по обеим осям + счётчик номера элемента
+            double[] arrayX = new double[10001];
+            double[] arrayY = new double[10001];
+            int i;
+
+            double P1yBefore, P1x, P1y, P2x, P2y;
+            for (double j = 0.50; j < 0.999; j += 0.001)
+            {
+                // Высчитываем координату y для одной направляющей точки
+                P1yBefore = ((Py - (0.25 * P0y)) / j);
+                // Пересчитываем координаты для двух направляющих точек
+                P1x = P0x + ((2 * (P1xBefore - P0x)) / 3);
+                P1y = P0y + ((2 * (P1yBefore - P0y)) / 3);
+                P2x = P1xBefore + ((P3x - P1xBefore) / 3);
+                P2y = P1yBefore + ((P3y - P1yBefore) / 3);
+                i = 0;
+                // Заполняем массивы по формулам построения кривых Безье
+                for (double t = 0; t <= 1; t += 0.0001)
+                {
+                    arrayX[i] = Math.Pow((1 - t), 3) * P0x + 3 * t * Math.Pow((1 - t), 2) * P1x
+                        + 3 * Math.Pow(t, 2) * (1 - t) * P2x + Math.Pow(t, 3) * P3x;
+                    arrayY[i] = Math.Pow((1 - t), 3) * P0y + 3 * t * Math.Pow((1 - t), 2) * P1y
+                        + 3 * Math.Pow(t, 2) * (1 - t) * P2y + Math.Pow(t, 3) * P3y;
+
+
+                    arrayForCheckX[i] = Math.Round(arrayX[i], 2);
+                    arrayForCheckY[i] = Math.Round(arrayY[i]);
+
+                    i++;
+                }
+
+                if (arrayForCheckX.Contains(P1xBefore) && arrayForCheckY[Array.IndexOf(arrayForCheckX, P1xBefore)] == Py)
+                {
+                    formsPlot1.plt.PlotScatter(arrayX, arrayY, color: Color.Black, markerSize: 0);
+                    formsPlot1.plt.Axis(0, 7, 600, 1600);
+                    formsPlot1.plt.AxisBounds(0, 7, 600, 1600);
+                    formsPlot1.Render();
+                    break;
+                }
+            }
+            return new List<double[]> { arrayX, arrayY };
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem.Equals("2 точки"))
+            {
+                bezierBuilding(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text), Convert.ToDouble(textBox7.Text),
+                    Convert.ToDouble(textBox8.Text));
+            }
+            else
+            {
+                bezierBuilding(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text), Convert.ToDouble(textBox3.Text),
+                    Convert.ToDouble(textBox4.Text), Convert.ToDouble(textBox7.Text), Convert.ToDouble(textBox8.Text));
+            }
+
+            if (listOfLabels.Count() != 0)
+            {
+                for (int i = 0; i < listOfLabels.Count(); i++)
+                {
+                    if (listOfComboBoxes[i].SelectedItem.Equals("2 точки"))
+                    {
+                        bezierBuilding(Convert.ToDouble(listOfTextBoxes[(i * 8) + 0].Text), Convert.ToDouble(listOfTextBoxes[(i * 8) + 1].Text),
+                            Convert.ToDouble(listOfTextBoxes[(i * 8) + 6].Text), Convert.ToDouble(listOfTextBoxes[(i * 8) + 7].Text));
+                    }
+                    else
+                    {
+                        bezierBuilding(Convert.ToDouble(listOfTextBoxes[(i * 8) + 0].Text), Convert.ToDouble(listOfTextBoxes[(i * 8) + 1].Text),
+                            Convert.ToDouble(listOfTextBoxes[(i * 8) + 2].Text), Convert.ToDouble(listOfTextBoxes[(i * 8) + 3].Text),
+                            Convert.ToDouble(listOfTextBoxes[(i * 8) + 6].Text), Convert.ToDouble(listOfTextBoxes[(i * 8) + 7].Text));
+                    }
+                }
+            }
+        }
     }
 }

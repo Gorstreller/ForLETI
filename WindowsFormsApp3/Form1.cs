@@ -567,14 +567,11 @@ namespace WindowsFormsApp3
                         listOfMassivesY.Remove(listOfMassivesY[j]);
                         break;
                     }
-                    //else
-                    //{
-                    //    return;
-                    //}
                 }
             }
             if (listOfMassivesX.Count() != 0)
             {
+                buildingReadyPoints(listOfMassivesX, listOfMassivesY);
                 return;
             }
             // Объединяем массивы, заливая их в новый unitedMassives
@@ -724,6 +721,16 @@ namespace WindowsFormsApp3
                 array[array.Length - i - 1] = tmp;
             }
             return array;
+        }
+
+        private void buildingReadyPoints(List<double[]> listOfMassivesX, List<double[]> listOfMassivesY)
+        {
+            for (int i=0; i<listOfMassivesX.Count(); i++)
+            {
+                formsPlot1.plt.PlotScatter(listOfMassivesX[i], listOfMassivesY[i], color: Color.Black,
+                    lineWidth: 5, markerSize: 0);
+                formsPlot1.Render();
+            }
         }
     }
 }
