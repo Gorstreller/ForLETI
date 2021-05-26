@@ -685,6 +685,9 @@ namespace WindowsFormsApp3
 
         private void button1_Click(object sender, EventArgs e)
         {
+            formsPlot1.plt.Clear();
+            formsPlot1.Render();
+
             if (comboBox1.SelectedItem.Equals("2 точки"))
             {
                 bezierBuilding(Convert.ToDouble(textBox1.Text), Convert.ToDouble(textBox2.Text), Convert.ToDouble(textBox7.Text),
